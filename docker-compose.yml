@@ -1,0 +1,20 @@
+services:
+  server:
+    image: bonsai-life-support/server
+    build:
+      context: server  # Set build working dir
+    ports:
+      - "35000:35000"
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+
+  gui-browser:
+    image: bonsai-life-support/gui-browser
+    build:
+      context: gui-browser
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./gui-browser:/usr/src/app
+      - /usr/src/app/node_modules

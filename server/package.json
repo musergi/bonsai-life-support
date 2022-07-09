@@ -1,0 +1,15 @@
+{
+    "name": "bonsai_life_support_server",
+    "version": "1.0.0",
+    "description": "Backend server for the Bonsai Life Support",
+    "author": "Sergi Mus <sergi.mus@gmail.com>",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.16.1",
+        "morgan": "^1.10.0"
+    }
+}
