@@ -1,6 +1,6 @@
-import React from "react";
-import Graph from "./Graph";
-import Api from './services/Api';
+import React from "react"
+import Api from './services/Api'
+import { Line } from 'react-chartjs-2'
 
 class App extends React.Component {
   constructor(props) {
@@ -31,9 +31,23 @@ class App extends React.Component {
   }
 
   render() {
+    const x = this.state.sensorData.map(dp => dp.timestamp).slice(0, 20).map(v => new String(v))
+    const y = this.state.sensorData.map(dp => dp.sensorValue).slice(0, 20)
     return (
       <div>
-        <Graph data={this.state.sensorData} width="400" height="400" />
+        <Line
+          data={{
+            labels: x,
+            datasets: [
+              {
+                label: 'Sensor Value',
+                data: y,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)'
+              }
+            ]
+          }}
+        />
       </div>
     );
   }
