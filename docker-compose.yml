@@ -2,10 +2,12 @@ services:
   server:
     image: bonsai-life-support/server
     build:
-      context: server  # Set build working dir
+      context: server # Set build working dir
     ports:
-      - "35000:35000"
+      - 35000:35000
     user: root
+    environment:
+      - DB_HOST=mongodb://localhost:27017/bonsai-life-support-production
     volumes:
       - ./server:/usr/src/app
 
@@ -14,6 +16,10 @@ services:
     build:
       context: gui-browser
     ports:
-      - "3000:3000"
+      - 3000:3000
     volumes:
       - ./gui-browser:/usr/src/app
+  db:
+    image: mongo
+    ports:
+      - 27017:27017

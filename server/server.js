@@ -1,30 +1,34 @@
-'use strict';
+'use strict'
 
-const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors')
+import express from 'express'
+import morgan from 'morgan'
+import cors from 'cors'
+import mongoose from 'mongoose'
+import { postValue, getSensorByDay, getSensorLastDay } from './routes/sensor.js'
 
-const port = process.env.SERVER_PORT;
-const host = process.env.SERVER_HOST;
+const host = process.env.SERVER_HOST
+const port = process.env.SERVER_PORT
+
+if (process.env.DB_HOST == undefined)
+  throw new Error('Missing enviroment variable DB_HOST')
+mongoose.connect(process.env.DB_HOST)
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error:'))
 
 const app = express();
-app.use(morgan('tiny'));
+if (process.env.SERVER_LOGGING)
+  app.use(morgan('tiny'))
 app.use(cors());
-
-app.get('/api/sensor/:id', (_, res) => {
-  const startTimestamp = 1657357200000;
-  const resultSet = []
-  let sensorValue =  512;
-  for (let i = 0; i < 1000; i++) {
-    sensorValue += Math.floor(Math.random() * 10 - 5);
-    sensorValue = Math.min(1023, Math.max(0, sensorValue));
-    resultSet.push( {timestamp: startTimestamp + i * 10000, sensorId: 1, sensorValue: sensorValue });
-  }
-  res.json(resultSet);
-});
+app.use(express.json())
 
 app.get('/api/test', (_, res) => {
-  res.json({ alive: true });
-});
+  res.json({ alive: true })
+})
 
-app.listen(port, host);
+app.get('/api/sensor/:id/day/last', getSensorLastDay)
+app.get('/api/sensor/:id/day/:timestamp', getSensorByDay)
+app.post('/api/sensor', postValue)
+
+app.listen(port, host)
+
+export default app

@@ -5,4 +5,4 @@ RUN npm install
 ENV SERVER_HOST=0.0.0.0
 ENV SERVER_PORT=35000
 EXPOSE 35000
-CMD [ "node", "server.js" ]
+CMD [ "npm", "start" ]
