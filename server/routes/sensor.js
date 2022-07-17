@@ -20,7 +20,7 @@ const getSensorByDay = async (req, res) => {
         const samples = await Sensor.find({ timestamp: { $gte: dayStart, $lte: dayEnd }, sensorId: Number(req.params.id) })
         const bucketKeys = t.range(dayStart, dayEnd, 'hour')
         let buckets = bucketKeys.map(bucketKey => samples.filter(sample => t.isAround(bucketKey, sample.timestamp, 'hour')))
-        buckets = buckets.map(bucket => bucket.map((v) => v.sensorValue).reduce(f.meanReduce, f.meanInit()))
+        buckets = buckets.map(bucket => bucket.map((v) => v.sensorValue).reduce(f.meanReduce, f.meanInit())).map(f.meanEnd)
         const result = bucketKeys.map((key, i) => ({ timestamp: key, sensorValue: buckets[i], sensorId: req.params.id }))
         res.json(result)
     } catch (err) {
@@ -31,16 +31,18 @@ const getSensorByDay = async (req, res) => {
 const getSensorLastDay = async (req, res) => {
     try {
         const timestamp = Number(req.params.timestamp)
-        const dayEnd = t.truncate(new Date().getTime(), 'hour')
+        const id = Number(req.params.id)
+        const lastSample = await Sensor.findOne({ sensorId: id }).sort({ timestamp: 'desc' })
+        const dayEnd = t.truncate(lastSample.timestamp, 'hour')
         const dayStart = t.previous(dayEnd, 'day')
-
-        const samples = await Sensor.find({ timestamp: { $gte: dayStart, $lte: dayEnd }, sensorId: Number(req.params.id) })
+        const samples = await Sensor.find({ timestamp: { $gte: dayStart, $lte: dayEnd }, sensorId: id })
         const bucketKeys = t.range(dayStart, dayEnd, 'hour')
         let buckets = bucketKeys.map(bucketKey => samples.filter(sample => t.isAround(bucketKey, sample.timestamp, 'hour')))
-        buckets = buckets.map(bucket => bucket.map((v) => v.sensorValue).reduce(f.meanReduce, f.meanInit()))
+        buckets = buckets.map(bucket => bucket.map((v) => v.sensorValue).reduce(f.meanReduce, f.meanInit())).map(f.meanEnd)
         const result = bucketKeys.map((key, i) => ({ timestamp: key, sensorValue: buckets[i], sensorId: req.params.id }))
         res.json(result)
     } catch (err) {
+        console.log(err)
         res.sendStatus(400)
     }
 }

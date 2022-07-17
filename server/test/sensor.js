@@ -30,6 +30,9 @@ describe('Sensor', () => {
                 .get('/api/sensor/3/day/1657929600000')
             res.should.have.status(200)
             res.body.should.have.length(25)
+            res.body.forEach((element, index) => {
+                element.timestamp.should.equal(1657929600000 + 60 * 60 * 1000 * index)
+            })
         })
     })
 
@@ -39,6 +42,9 @@ describe('Sensor', () => {
                 .get('/api/sensor/3/day/last')
             res.should.have.status(200)
             res.body.should.have.length(25)
+            res.body.forEach((element, index) => {
+                element.timestamp.should.equal(1657926000000 + 60 * 60 * 1000 * index)
+            })
         })
     })
 
