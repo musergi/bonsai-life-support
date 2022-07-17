@@ -4,7 +4,7 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import { postValue, getSensorByDay, getSensorLastDay } from './routes/sensor.js'
+import { postValue, getSensorByDay, getSensorLastDay, getSensorLast } from './routes/sensor.js'
 
 const host = process.env.SERVER_HOST
 const port = process.env.SERVER_PORT
@@ -28,6 +28,7 @@ app.get('/api/test', (_, res) => {
 
 app.get('/api/sensor/:id/day/last', getSensorLastDay)
 app.get('/api/sensor/:id/day/:timestamp', getSensorByDay)
+app.get('/api/sensor/:id/last', getSensorLast)
 app.post('/api/sensor', postValue)
 
 app.listen(port, host)

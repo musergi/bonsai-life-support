@@ -2,18 +2,17 @@ import Sensor from '../models/sensor.js'
 import t from '../utils/timestamp.js'
 import f from '../utils/functional.js'
 
-const postValue = async (req, res) => {
+export const postValue = async (req, res) => {
     try {
         const value = new Sensor(req.body)
         await value.save()
         res.sendStatus(200)
     } catch (err) {
-        console.log(err)
         res.sendStatus(400)
     }
 }
 
-const getSensorByDay = async (req, res) => {
+export const getSensorByDay = async (req, res) => {
     try {
         const timestamp = Number(req.params.timestamp)
         const dayStart = t.truncate(timestamp, 'day')
@@ -25,12 +24,11 @@ const getSensorByDay = async (req, res) => {
         const result = bucketKeys.map((key, i) => ({ timestamp: key, sensorValue: buckets[i], sensorId: req.params.id }))
         res.json(result)
     } catch (err) {
-        console.log(err)
         res.sendStatus(400)
     }
 }
 
-const getSensorLastDay = async (req, res) => {
+export const getSensorLastDay = async (req, res) => {
     try {
         const timestamp = Number(req.params.timestamp)
         const id = Number(req.params.id)
@@ -44,9 +42,15 @@ const getSensorLastDay = async (req, res) => {
         const result = bucketKeys.map((key, i) => ({ timestamp: key, sensorValue: buckets[i], sensorId: req.params.id }))
         res.json(result)
     } catch (err) {
-        console.log(err)
         res.sendStatus(400)
     }
 }
 
-export { postValue, getSensorByDay, getSensorLastDay }
+export const getSensorLast = async (req, res) => {
+    try {
+        const sensor = await Sensor.findOne({ sensorId: req.params.id }).sort({ timestamp: 'desc' })
+        res.json(sensor)
+    } catch (err) {
+        res.sendStatus(400)
+    }
+}

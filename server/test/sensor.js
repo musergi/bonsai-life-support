@@ -36,6 +36,15 @@ describe('Sensor', () => {
         })
     })
 
+    describe('GET /sensor/:id/last', () => {
+        it('it should return the last sample recorded by the sensor', async () => {
+            const res = await chai.request(server)
+                .get('/api/sensor/3/last')
+            res.should.have.status(200)
+            res.body.timestamp.should.equal(1658016000000 - 100000)
+        })
+    })
+
     describe('GET /sensor/:id/day/last', () => {
         it('it should return hour splits of the last day', async () => {
             const res = await chai.request(server)
