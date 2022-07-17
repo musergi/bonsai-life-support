@@ -6,10 +6,11 @@ const postValue = async (req, res) => {
     try {
         const value = new Sensor(req.body)
         await value.save()
-    } catch {
+        res.sendStatus(200)
+    } catch (err) {
+        console.log(err)
         res.sendStatus(400)
     }
-    res.sendStatus(200)
 }
 
 const getSensorByDay = async (req, res) => {
@@ -24,6 +25,7 @@ const getSensorByDay = async (req, res) => {
         const result = bucketKeys.map((key, i) => ({ timestamp: key, sensorValue: buckets[i], sensorId: req.params.id }))
         res.json(result)
     } catch (err) {
+        console.log(err)
         res.sendStatus(400)
     }
 }
