@@ -1,0 +1,1 @@
+export const getLastDay = (sensorId) => fetch(`http://localhost:35000/api/sensor/${sensorId}/day/last`).then(data => data.json())
