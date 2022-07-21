@@ -1,14 +1,15 @@
 .SideBar {
-    flex-grow: 1;
-    width: fit-content;
-    padding: 3em;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: fit-content;
+    margin: 4em;
     display: flex;
     flex-direction: column;
     gap: 1.5em;
 }
 
 .SideBarCard {
-    border: rgb(134, 171, 165) solid 2px;
+    border: var(--foreground-color) solid 2px;
     border-radius: 15px;
     overflow: hidden;
 }
@@ -17,7 +18,8 @@
     padding: 0.5em 1em;
     margin: 0;
     text-align: center;
-    background-color: rgb(134, 171, 165);
+    color: var(--background-color);
+    background-color: var(--foreground-color);
 }
 
 .SideBarCard>span {

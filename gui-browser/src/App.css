@@ -2,4 +2,14 @@
     display: flex;
     flex-direction: row;
     height: 100vh;
+    color: var(--foreground-color);
+    background-color: var(--background-color);
+
+    --background-color: #FEF5ED;
+    --foreground-color: #ADC2A9;
+}
+
+.dark {
+    --foreground-color: #D3E4CD;
+    --background-color: #99A799;
 }

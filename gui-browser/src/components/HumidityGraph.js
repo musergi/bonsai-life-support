@@ -30,19 +30,52 @@ const formatTimestamp = (timestamp) => {
 
 const convertHumidity = (sensorValue) => (1023 - sensorValue) / 1023 * 100
 
-const HumidityGraph = ({ sensorId }) => {
+const HumidityGraph = ({ id, color }) => {
     const [timestamps, setTimestamps] = useState([])
     const [humidities, setHumidities] = useState([])
 
     useEffect(() => {
-        let mounted = true
-        getLastDay(sensorId).then(samples => {
-            if (mounted) {
-                setTimestamps(samples.map(sample => sample.timestamp).map(formatTimestamp))
-                setHumidities(samples.map(sample => sample.sensorValue).map(convertHumidity))
-            }
+        getLastDay(id).then(samples => {
+            setTimestamps(samples.map(sample => sample.timestamp).map(formatTimestamp))
+            setHumidities(samples.map(sample => sample.sensorValue).map(convertHumidity))
         })
-    })
+    }, [id])
+
+    const bigFont = { size: 24 }
+
+    const xAxisConfig = {
+        title: {
+            text: 'Time',
+            color: color,
+            display: true,
+            font: bigFont
+        },
+        grid: {
+            color: color + '88',
+            borderColor: color,
+        },
+        ticks: {
+            color: color,
+        }
+    }
+
+    const yAxisConfig = {
+        title: {
+            text: 'Humidity',
+            color: color,
+            display: true,
+            font: bigFont
+        },
+        grid: {
+            color: color + '88',
+            borderColor: color,
+        },
+        ticks: {
+            color: color,
+            callback: (value) => value + '%'
+        }
+    }
+
     return <div className='HumidityGraph'>
         <Line
             data={{
@@ -51,17 +84,21 @@ const HumidityGraph = ({ sensorId }) => {
                     {
                         label: 'Sensor Value',
                         data: humidities,
-                        borderColor: 'rgb(134, 171, 165)',
-                        backgroundColor: 'rgba(134, 171, 165, 0.5)',
+                        borderColor: color,
+                        backgroundColor: color,
                         cubicInterpolationMode: 'monotone',
                         tension: 0.4
                     }
                 ]
             }}
-
             options={{
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                scales: {
+                    x: xAxisConfig,
+                    y: yAxisConfig
+                },
+                plugins: { legend: { display: false } },
             }}
         />
     </div>
