@@ -7,7 +7,7 @@
     "type": "module",
     "scripts": {
         "start": "node server.js",
-        "test": "DB_HOST=mongodb://localhost:27017/bonsai-life-support-test mocha --timeout 2000"
+        "test": "mocha --timeout 2000 --exit"
     },
     "dependencies": {
         "chai": "^4.3.6",

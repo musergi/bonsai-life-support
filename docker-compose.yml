@@ -2,11 +2,14 @@ services:
   server:
     image: bonsai-life-support/server
     build:
-      context: server # Set build working dir
+      context: server
+      target: serve
     ports:
       - 35000:35000
     user: root
     environment:
+      - ENV SERVER_HOST=0.0.0.0
+      - ENV SERVER_PORT=35000
       - DB_HOST=mongodb://mongodb:27017/bonsai-life-support-production
       - SERVER_LOGGING=true
     volumes:
@@ -20,6 +23,7 @@ services:
       - 3000:3000
     volumes:
       - ./gui-browser:/usr/src/app
+
   mongodb:
     image: mongo
     ports:

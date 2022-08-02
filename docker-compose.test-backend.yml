@@ -1,0 +1,23 @@
+services:
+  server:
+    image: bonsai-life-support/server
+    build:
+      context: server
+      target: test
+    ports:
+      - 35000:35000
+    user: root
+    environment:
+      - DB_HOST=mongodb://mongodb:27017/bonsai-life-support-test
+      - SERVER_LOGGING=true
+    volumes:
+      - ./server:/usr/local/src/app
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    logging:
+      driver: none
