@@ -10,13 +10,13 @@ chai.use(chaiHttp)
 describe('Sensor', () => {
     beforeEach(async () => {
         await Sensor.deleteMany()
-        const dayStart = 1657843200000
-        const dayEnd = 1658016000000
+        const dayStart = 1657843200000 // 2022-07-15 00:00:00
+        const dayEnd = 1658016000000 // 2022-07-17 00:00:00
         let data = []
         let timestampPtr = dayStart
         while (timestampPtr < dayEnd) {
             data.push({ timestamp: timestampPtr, sensorId: 3, sensorValue: 512 })
-            timestampPtr += 100000
+            timestampPtr += 100000 // A sample every 10 seconds
         }
         await Sensor.insertMany(data)
         const res = await chai.request(server)
@@ -26,6 +26,7 @@ describe('Sensor', () => {
 
     describe('GET /sensor/:id/day/:timestamp', () => {
         it('it should return hour splits of the day data', async () => {
+            // Resquest for 2022-07-16 00:00:00
             const res = await chai.request(server)
                 .get('/api/sensor/3/day/1657929600000')
             res.should.have.status(200)
@@ -68,15 +69,21 @@ describe('Sensor', () => {
             finalCount.should.equal(initialCount + 1)
         })
 
-        it('it should throw an error if a field is missing', async () => {
+        it('it should throw an error if sensor id missing', async () => {
             const noIdResponse = await chai.request(server)
                 .post('/api/sensor')
                 .send({ timestamp: 1500000000, sensorValue: 512 })
             noIdResponse.should.have.status(400)
+        })
+
+        it('it should throw an error if timestamp missing', async () => {
             const noTimestampResponse = await chai.request(server)
                 .post('/api/sensor')
                 .send({ sensorId: 3, sensorValue: 512 })
             noTimestampResponse.should.have.status(400)
+        })
+
+        it('it should throw an error if value missing', async () => {
             const noValueResponse = await chai.request(server)
                 .post('/api/sensor')
                 .send({ timestamp: 1500000000, sensorId: 3 })
