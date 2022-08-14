@@ -1,15 +1,20 @@
 .App {
     display: flex;
     flex-direction: row;
-    height: 100vh;
-    color: var(--foreground-color);
-    background-color: var(--background-color);
+    align-items: flex-start;
+    min-height: 100vh;
+    color: var(--clr-fg);
+    background-color: var(--clr-bg);
+}
 
-    --background-color: #FEF5ED;
-    --foreground-color: #ADC2A9;
+.light {
+    --clr-fg: #000;
+    --clr-bg: #FFF;
+    --clr-bg-light: #DDD;
 }
 
 .dark {
-    --foreground-color: #D3E4CD;
-    --background-color: #99A799;
+    --clr-fg: #FFF;
+    --clr-bg: #000;
+    --clr-bg-light: #222;
 }

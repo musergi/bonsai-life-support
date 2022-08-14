@@ -1,0 +1,27 @@
+.Card {
+    display: flex;
+    flex-direction: column;
+    min-width: 4rem;
+    min-height: 4rem;
+    background-color: var(--clr-bg-light);
+    margin: 1rem;
+}
+
+.Card h1 {
+    font-size: 1rem;
+    margin: 0;
+    padding: 1em;
+    background-image: linear-gradient(135deg,
+        var(--clr-bg),
+        var(--clr-bg-light));
+    background-position: 80%;
+    background-size: 300%;
+}
+
+.Card p {
+    font-size: 3rem;
+    display: block;
+    text-align: center;
+    margin: auto;
+    padding: 0.5em;
+}

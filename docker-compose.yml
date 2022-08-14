@@ -8,12 +8,12 @@ services:
       - 35000:35000
     user: root
     environment:
-      - ENV SERVER_HOST=0.0.0.0
-      - ENV SERVER_PORT=35000
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=35000
       - DB_HOST=mongodb://mongodb:27017/bonsai-life-support-production
       - SERVER_LOGGING=true
     volumes:
-      - ./server:/usr/src/app
+      - ./server:/usr/local/src/app
 
   gui-browser:
     image: bonsai-life-support/gui-browser
@@ -28,3 +28,5 @@ services:
     image: mongo
     ports:
       - 27017:27017
+    volumes:
+      - ./data:/data/db
